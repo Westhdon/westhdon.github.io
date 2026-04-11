@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEWYSCRIPT Compiler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 150px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+    <script>
+        function generatePowerShell() {
+            let inputCode = document.getElementById("inputCode").value;
+            let lines = inputCode.split("\n");
+            let psCode = 'Add-Type -AssemblyName System.Windows.Forms\nAdd-Type -AssemblyName System.Drawing\n';
+            let eventScripts = [];
+            let functionScripts = "";
+            let elementIndex = 0;
+
+            for (let line of lines) {
+                line = line.trim();
+                
+                if (line.startsWith("Function")) {
+                    let parts = line.match(/Function (\w+) \[(.*)\]/);
+                    if (parts) {
+                        functionScripts += `$${parts[1]} = { ${parts[2]} }\n`;
+                    }
+                }
+                else if (line.startsWith("Form")) {
+                    let parts = line.match(/Form "(.*)" (\d+)x(\d+)/);
+                    if (parts) {
+                        psCode += `$form = New-Object System.Windows.Forms.Form\n`;
+                        psCode += `$form.Text = "${parts[1]}"\n`;
+                        psCode += `$form.Size = New-Object System.Drawing.Size(${parts[2]},${parts[3]})\n`;
+                        psCode += `$form.StartPosition = "CenterScreen"\n`;
+                    }
+                }
+                else if (line.startsWith("Button")) {
+                    let parts = line.match(/Button "(.*)" (\d+),(\d+) \[(.*)\]/);
+                    if (parts) {
+                        let btnVar = `$button${elementIndex}`;
+                        psCode += `${btnVar} = New-Object System.Windows.Forms.Button\n`;
+                        psCode += `${btnVar}.Text = "${parts[1]}"\n`;
+                        psCode += `${btnVar}.Location = New-Object System.Drawing.Point(${parts[2]},${parts[3]})\n`;
+                        psCode += `$form.Controls.Add(${btnVar})\n`;
+                        
+                        let eventScript = `$${parts[1].replace(/\s+/g, "")}Event = { ${parts[4]} }\n`;
+                        eventScripts.push(eventScript);
+                        psCode += `${btnVar}.Add_Click($${parts[1].replace(/\s+/g, "")}Event)\n`;
+                        elementIndex++;
+                    }
+                }
+                else if (line.startsWith("Label")) {
+                    let parts = line.match(/Label "(.*)" (\d+),(\d+)/);
+                    if (parts) {
+                        let lblVar = `$label${elementIndex}`;
+                        psCode += `${lblVar} = New-Object System.Windows.Forms.Label\n`;
+                        psCode += `${lblVar}.Text = "${parts[1]}"\n`;
+                        psCode += `${lblVar}.Location = New-Object System.Drawing.Point(${parts[2]},${parts[3]})\n`;
+                        psCode += `$form.Controls.Add(${lblVar})\n`;
+                        elementIndex++;
+                    }
+                }
+                else if (line.startsWith("Textbox")) {
+                    let parts = line.match(/Textbox (\d+),(\d+) (\d+),(\d+)/);
+                    if (parts) {
+                        let txtVar = `$textbox${elementIndex}`;
+                        psCode += `${txtVar} = New-Object System.Windows.Forms.TextBox\n`;
+                        psCode += `${txtVar}.Location = New-Object System.Drawing.Point(${parts[1]},${parts[2]})\n`;
+                        psCode += `${txtVar}.Size = New-Object System.Drawing.Size(${parts[3]},${parts[4]})\n`;
+                        psCode += `$form.Controls.Add(${txtVar})\n`;
+                        elementIndex++;
+                    }
+                }
+                else if (line.startsWith("ProgressBar")) {
+                    let parts = line.match(/ProgressBar (\d+),(\d+) (\d+),(\d+)/);
+                    if (parts) {
+                        let progVar = `$progress${elementIndex}`;
+                        psCode += `${progVar} = New-Object System.Windows.Forms.ProgressBar\n`;
+                        psCode += `${progVar}.Location = New-Object System.Drawing.Point(${parts[1]},${parts[2]})\n`;
+                        psCode += `${progVar}.Size = New-Object System.Drawing.Size(${parts[3]},${parts[4]})\n`;
+                        psCode += `$form.Controls.Add(${progVar})\n`;
+                        elementIndex++;
+                    }
+                }
+                else if (line.startsWith("Run")) {
+                    psCode += "$form.ShowDialog()\n";
+                }
+            }
+            
+            psCode = functionScripts + eventScripts.join("") + psCode;
+            document.getElementById("outputCode").value = psCode;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>GEWYSCRIPT Compiler</h2>
+        <p>Write your GEWYSCRIPT below:</p>
+        <textarea id="inputCode">Form "My App" 500x400
+Label "Enter Name:" 20,20
+Textbox 20,50 200,30
+ProgressBar 20,100 200,20
+Button "Submit" 20,150 [Write-Host "Submitted!"]
+Run</textarea>
+        <br>
+        <button onclick="generatePowerShell()">Generate Powershell Code</button>
+        <h3>Generated PowerShell Code:</h3>
+        <textarea id="outputCode" readonly></textarea>
+    </div>
+</body>
+</html>
