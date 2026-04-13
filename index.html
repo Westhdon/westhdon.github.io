@@ -22,7 +22,6 @@
       --accent2: #57ffd4;
       --danger:  #ff5757;
       --r:       12px;
-      --f1-h:    56px;
       --nav-h:   64px;
     }
 
@@ -35,7 +34,6 @@
       font-size: 16px;
       line-height: 1.6;
       overflow-x: hidden;
-      padding-bottom: var(--f1-h);
     }
 
     /* ── Custom Cursor (desktop only) ── */
@@ -64,6 +62,40 @@
     main { position: relative; z-index: 1; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
 
+    /* ═══════════════════════════
+       SCROLL PROGRESS BAR
+    ═══════════════════════════ */
+    #scroll-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+      height: 3px;
+      background: transparent;
+      pointer-events: none;
+    }
+    #scroll-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transition: width 0.08s linear;
+      position: relative;
+    }
+    /* Glowing head dot */
+    #scroll-fill::after {
+      content: '';
+      position: absolute; right: -1px; top: 50%;
+      transform: translateY(-50%);
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px 2px rgba(184,255,87,0.9),
+                  0 0 20px 4px rgba(184,255,87,0.4);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    #scroll-bar.active #scroll-fill::after { opacity: 1; }
+    #scroll-bar.active #scroll-fill {
+      filter: drop-shadow(0 0 4px rgba(184,255,87,0.5));
+    }
+
     /* ════════════════════════════
        NAV
     ════════════════════════════ */
@@ -89,7 +121,7 @@
     }
     .nav-links a:hover { color: var(--accent); }
 
-    /* Hamburger (mobile) */
+    /* Hamburger */
     .nav-toggle {
       display: none;
       flex-direction: column; gap: 5px;
@@ -104,23 +136,18 @@
     .nav-toggle.open span:nth-child(2) { opacity: 0; }
     .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Mobile drawer */
     .nav-drawer {
       display: none;
       position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 299;
-      background: rgba(8,8,8,0.97);
-      backdrop-filter: blur(24px);
+      background: rgba(8,8,8,0.97); backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      padding: 20px 24px 28px;
-      flex-direction: column; gap: 0;
+      padding: 20px 24px 28px; flex-direction: column; gap: 0;
     }
     .nav-drawer.open { display: flex; }
     .nav-drawer a {
-      display: block; padding: 14px 0;
-      font-size: 20px; font-weight: 700;
+      display: block; padding: 14px 0; font-size: 20px; font-weight: 700;
       color: var(--text); text-decoration: none;
-      border-bottom: 1px solid var(--border);
-      transition: color 0.2s;
+      border-bottom: 1px solid var(--border); transition: color 0.2s;
     }
     .nav-drawer a:last-child { border-bottom: none; }
     .nav-drawer a:hover { color: var(--accent); }
@@ -147,12 +174,9 @@
       letter-spacing: -0.02em; margin-bottom: 28px;
       opacity: 0; animation: fadeUp 0.7s 0.25s ease forwards;
     }
-
-    /* Glitch — hover only */
     .glitch-wrap { display: inline-block; position: relative; }
     .glitch-wrap .g-main { display: block; position: relative; z-index: 1; }
-    .glitch-wrap .g-a,
-    .glitch-wrap .g-b {
+    .glitch-wrap .g-a, .glitch-wrap .g-b {
       position: absolute; inset: 0; display: block;
       opacity: 0; pointer-events: none;
       font-size: inherit; font-weight: inherit;
@@ -242,11 +266,7 @@
     /* ════════════════════════════
        PROJECT CARDS
     ════════════════════════════ */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 18px;
-    }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
     .project-card {
       background: var(--bg2); border: 1px solid var(--border);
       border-radius: var(--r); padding: 26px;
@@ -261,11 +281,7 @@
       opacity: 0; transition: opacity 0.3s;
     }
     .project-card:hover::before { opacity: 1; }
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
-    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
     .project-badge {
       font-family: 'Fragment Mono', monospace; font-size: 9px;
       letter-spacing: 0.2em; text-transform: uppercase;
@@ -281,11 +297,7 @@
     /* ════════════════════════════
        LINK CARDS
     ════════════════════════════ */
-    .links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 14px;
-    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
     .link-card {
       background: var(--bg2); border: 1px solid var(--border);
       border-radius: var(--r); padding: 20px 22px;
@@ -350,9 +362,7 @@
     }
     .contact-box h2 { font-size: clamp(32px,5vw,44px); font-weight: 800; margin-bottom: 14px; position: relative; }
     .contact-box > p { color: var(--dim); font-size: 15px; margin-bottom: 36px; position: relative; }
-    .contact-actions {
-      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative;
-    }
+    .contact-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
     .contact-btn {
       display: inline-flex; align-items: center; gap: 9px;
       padding: 14px 28px; border-radius: var(--r);
@@ -360,13 +370,9 @@
       transition: transform 0.18s, box-shadow 0.18s, border-color 0.2s;
     }
     .contact-btn:hover { transform: translateY(-2px); }
-    .contact-btn-primary {
-      background: var(--accent); color: #080808;
-    }
+    .contact-btn-primary { background: var(--accent); color: #080808; }
     .contact-btn-primary:hover { box-shadow: 0 8px 30px rgba(184,255,87,0.28); }
-    .contact-btn-ghost {
-      border: 1px solid var(--border); color: var(--text); background: transparent;
-    }
+    .contact-btn-ghost { border: 1px solid var(--border); color: var(--text); background: transparent; }
     .contact-btn-ghost:hover { border-color: #7289da; color: #7289da; }
 
     /* ════════════════════════════
@@ -396,151 +402,219 @@
     .reveal-delay-3 { transition-delay:0.24s; }
     .reveal-delay-4 { transition-delay:0.32s; }
 
-    /* ════════════════════════════════════════════
-       F1 SCROLL INDICATOR
-    ════════════════════════════════════════════ */
-    #f1-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: var(--f1-h); z-index: 200;
-      background: #090909;
-      border-top: 1px solid #1c1c1c;
-      overflow: hidden;
+    /* ═══════════════════════════════════════
+       MUSIC PLAYER — floating pop-out
+    ═══════════════════════════════════════ */
+
+    /* Trigger pill — always visible bottom-right */
+    #music-trigger {
+      position: fixed; bottom: 28px; right: 28px; z-index: 8000;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      background: rgba(10,10,10,0.92);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      user-select: none;
+    }
+    #music-trigger:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(184,255,87,0.15);
+      transform: translateY(-1px);
+    }
+    #music-trigger.playing {
+      border-color: rgba(184,255,87,0.4);
+      box-shadow: 0 0 16px rgba(184,255,87,0.1);
     }
 
-    /* Asphalt texture */
-    #f1-bar::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px,
-        transparent 1px, transparent 60px
-      );
+    /* Waveform bars in trigger */
+    .wave-bars {
+      display: flex; align-items: center; gap: 2px; height: 16px;
+    }
+    .wave-bars span {
+      display: block; width: 3px; border-radius: 2px;
+      background: var(--accent);
+      height: 4px;
+      transition: background 0.3s;
+    }
+    #music-trigger.playing .wave-bars span:nth-child(1) { animation: waveBar 0.9s ease-in-out infinite; }
+    #music-trigger.playing .wave-bars span:nth-child(2) { animation: waveBar 0.9s ease-in-out 0.15s infinite; }
+    #music-trigger.playing .wave-bars span:nth-child(3) { animation: waveBar 0.9s ease-in-out 0.3s infinite; }
+    #music-trigger.playing .wave-bars span:nth-child(4) { animation: waveBar 0.9s ease-in-out 0.1s infinite; }
+    #music-trigger.playing .wave-bars span:nth-child(5) { animation: waveBar 0.9s ease-in-out 0.4s infinite; }
+
+    @keyframes waveBar {
+      0%,100% { height: 3px; }
+      50%      { height: 14px; }
+    }
+
+    .trigger-label {
+      font-family: 'Fragment Mono', monospace;
+      font-size: 10px; letter-spacing: 0.12em;
+      color: var(--dim); white-space: nowrap;
+      transition: color 0.2s;
+    }
+    #music-trigger.playing .trigger-label { color: var(--accent); }
+
+    /* Pop-out panel */
+    #music-panel {
+      position: fixed; bottom: 82px; right: 28px; z-index: 7999;
+      width: 300px;
+      background: rgba(8,8,8,0.95);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(184,255,87,0.04);
+      transform: translateY(12px) scale(0.97);
+      opacity: 0;
       pointer-events: none;
+      transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+                  opacity 0.22s ease;
+    }
+    #music-panel.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
     }
 
-    /* Centre white line */
-    #f1-track-line {
-      position: absolute; top: 50%; left: 0; right: 0;
-      height: 1px; background: rgba(255,255,255,0.07);
-      transform: translateY(-50%);
+    /* Panel header */
+    .mp-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .mp-title {
+      font-family: 'Fragment Mono', monospace;
+      font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .mp-close {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--bg3); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 11px; color: var(--dim);
+      transition: background 0.2s, color 0.2s;
+    }
+    .mp-close:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+    /* Visualizer canvas */
+    #mp-viz {
+      width: 100%; height: 48px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      background: var(--bg3);
+      display: block;
     }
 
-    /* Dashes on centre line */
-    #f1-track-dashes {
-      position: absolute; top: 50%; left: 0; right: 0; height: 2px;
-      transform: translateY(-50%);
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 22px,
-        transparent 22px, transparent 50px
-      );
+    /* Track info */
+    .mp-track {
+      margin-bottom: 16px;
+    }
+    .mp-track-name {
+      font-size: 14px; font-weight: 700; margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .mp-track-sub {
+      font-family: 'Fragment Mono', monospace;
+      font-size: 10px; color: var(--dim); letter-spacing: 0.08em;
     }
 
-    /* Progress fill (tyre marks look) */
-    #f1-progress {
-      position: absolute; top: 0; left: 0; bottom: 0; width: 0%;
-      background: linear-gradient(90deg,
-        rgba(184,255,87,0.06) 0%,
-        rgba(184,255,87,0.03) 80%,
-        transparent 100%
-      );
-      transition: width 0.1s linear;
-      pointer-events: none;
+    /* Controls row */
+    .mp-controls {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      margin-bottom: 18px;
+    }
+    .mp-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg3); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px; color: var(--text);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .mp-btn:hover { background: var(--bg2); border-color: var(--accent); transform: scale(1.08); }
+    .mp-btn-play {
+      width: 46px; height: 46px; font-size: 18px;
+      background: var(--accent); color: #080808;
+      border-color: var(--accent);
+    }
+    .mp-btn-play:hover { background: #ceff77; transform: scale(1.08); }
+
+    /* Volume row */
+    .mp-volume {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mp-vol-icon { font-size: 13px; color: var(--dim); flex-shrink: 0; }
+    .mp-vol-slider {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 4px; border-radius: 2px; cursor: pointer;
+      background: var(--border); outline: none;
+    }
+    .mp-vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 0 6px rgba(184,255,87,0.5);
+      transition: transform 0.15s;
+    }
+    .mp-vol-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .mp-vol-slider::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); border: none; cursor: pointer;
     }
 
-    /* Tyre marks */
-    #f1-tyre-marks {
-      position: absolute; left: 0; bottom: 8px; right: 0; height: 3px;
-      pointer-events: none; overflow: hidden;
+    /* Track list */
+    .mp-tracks {
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: flex; flex-direction: column; gap: 4px;
     }
-    #f1-tyre-upper, #f1-tyre-lower {
-      position: absolute; left: 0; right: 0; height: 1px;
-      background: rgba(50,50,50,0.5);
+    .mp-track-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 8px;
+      cursor: pointer; transition: background 0.18s;
     }
-    #f1-tyre-upper { top: 0; }
-    #f1-tyre-lower { bottom: 0; }
-
-    /* Percent */
-    #f1-pct {
-      position: absolute; right: 16px; top: 50%;
-      transform: translateY(-50%);
-      font-family: 'Fragment Mono', monospace; font-size: 9px;
-      color: #333; letter-spacing: 0.18em;
-      pointer-events: none; user-select: none;
-      transition: color 0.3s;
+    .mp-track-item:hover { background: var(--bg3); }
+    .mp-track-item.active { background: rgba(184,255,87,0.07); }
+    .mp-track-item.active .mp-ti-name { color: var(--accent); }
+    .mp-ti-num {
+      font-family: 'Fragment Mono', monospace; font-size: 10px;
+      color: var(--muted); width: 16px; flex-shrink: 0; text-align: right;
     }
-    #f1-bar.scrolling #f1-pct { color: var(--accent); }
-
-    /* Car wrapper */
-    #f1-car-wrap {
-      position: absolute; bottom: 5px;
-      left: 0; transition: left 0.1s linear;
-      will-change: left;
-      display: flex; align-items: flex-end;
+    .mp-track-item.active .mp-ti-num { color: var(--accent); }
+    .mp-ti-name { font-size: 13px; font-weight: 600; flex: 1; }
+    .mp-ti-dur {
+      font-family: 'Fragment Mono', monospace; font-size: 10px;
+      color: var(--dim); flex-shrink: 0;
     }
-
-    /* Exhaust gases */
-    #f1-exhaust {
-      display: flex; flex-direction: column; gap: 2px;
-      align-items: flex-end; margin-right: 0px;
-      opacity: 0; transition: opacity 0.2s;
-    }
-    #f1-bar.scrolling #f1-exhaust { opacity: 1; }
-    .exhaust-puff {
-      height: 2px; border-radius: 2px;
-      background: linear-gradient(to left, transparent, rgba(200,140,60,0.7));
-      transition: width 0.15s ease;
-      width: 0;
-    }
-    #f1-bar.scrolling .exhaust-puff:nth-child(1) { width: 28px; background: linear-gradient(to left, transparent, rgba(255,160,40,0.8)); }
-    #f1-bar.scrolling .exhaust-puff:nth-child(2) { width: 18px; background: linear-gradient(to left, transparent, rgba(255,80,10,0.6)); }
-
-    /* Speed shimmer under tyres */
-    #f1-speed-lines {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-      opacity: 0; transition: opacity 0.2s;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(184,255,87,0.15) 40%,
-        rgba(184,255,87,0.08) 70%,
-        transparent 100%
-      );
-    }
-    #f1-bar.scrolling #f1-speed-lines { opacity: 1; }
 
     /* ════════════════════════════════
        MOBILE
     ════════════════════════════════ */
     @media (max-width: 768px) {
-      :root { --nav-h: 58px; --f1-h: 48px; }
+      :root { --nav-h: 58px; }
       .container { padding: 0 20px; }
       nav { padding: 0 20px; }
       .nav-links { display: none; }
       .nav-toggle { display: flex; }
-
-      #hero {
-        padding: calc(var(--nav-h) + 40px) 20px 60px;
-        min-height: calc(100svh - var(--f1-h));
-      }
+      #hero { padding: calc(var(--nav-h) + 40px) 20px 60px; min-height: 100svh; }
       .scroll-hint { display: none; }
-
       .projects-grid { grid-template-columns: 1fr; }
       .links-grid { grid-template-columns: 1fr 1fr; }
-
       .download-row { flex-direction: column; align-items: flex-start; }
       .btn-dl { width: 100%; justify-content: center; }
-
       .contact-box { padding: 36px 22px; }
       .contact-actions { flex-direction: column; align-items: center; }
       .contact-btn { width: 100%; justify-content: center; }
-
       footer { flex-direction: column; align-items: flex-start; gap: 12px; }
       .footer-links { gap: 14px; }
-
       .stats-row { gap: 28px; }
+      #music-panel { width: calc(100vw - 32px); right: 16px; bottom: 74px; }
+      #music-trigger { bottom: 18px; right: 16px; }
     }
-
     @media (max-width: 420px) {
       .links-grid { grid-template-columns: 1fr; }
       .hero-name { letter-spacing: -0.03em; }
@@ -551,175 +625,57 @@
 
   <div id="cursor"></div>
 
+  <!-- ══ Scroll Progress Bar ══ -->
+  <div id="scroll-bar"><div id="scroll-fill"></div></div>
+
   <!-- ═══════════════════════════════
-       F1 SCROLL BAR
+       MUSIC PLAYER
   ═══════════════════════════════ -->
-  <div id="f1-bar">
-    <div id="f1-track-line"></div>
-    <div id="f1-track-dashes"></div>
-    <div id="f1-progress"></div>
-    <div id="f1-speed-lines"></div>
-    <div id="f1-car-wrap">
-      <div id="f1-exhaust">
-        <div class="exhaust-puff"></div>
-        <div class="exhaust-puff"></div>
-      </div>
-      <!--
-        F1 car SVG — side profile facing right
-        ViewBox: 0 0 180 44  (wider for realistic proportions)
-      -->
-      <svg id="f1-svg" viewBox="0 0 180 44" xmlns="http://www.w3.org/2000/svg"
-           style="height:42px;width:auto;display:block;" aria-hidden="true">
-        <defs>
-          <!-- Tyre gradient (realistic rubber) -->
-          <radialGradient id="tyre-g" cx="40%" cy="35%" r="60%">
-            <stop offset="0%" stop-color="#2a2a2a"/>
-            <stop offset="60%" stop-color="#111"/>
-            <stop offset="100%" stop-color="#0a0a0a"/>
-          </radialGradient>
-          <!-- Rim gradient -->
-          <radialGradient id="rim-g" cx="40%" cy="35%" r="60%">
-            <stop offset="0%" stop-color="#555"/>
-            <stop offset="100%" stop-color="#222"/>
-          </radialGradient>
-          <!-- Body gradient -->
-          <linearGradient id="body-g" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#e0e0e0"/>
-            <stop offset="100%" stop-color="#b0b0b0"/>
-          </linearGradient>
-          <!-- Cockpit glass -->
-          <linearGradient id="glass-g" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#1a2a1a" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#0a0f0a" stop-opacity="0.95"/>
-          </linearGradient>
-          <!-- Accent green -->
-          <linearGradient id="acc-g" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#c8ff70"/>
-            <stop offset="100%" stop-color="#94d630"/>
-          </linearGradient>
-          <!-- Nose glow -->
-          <filter id="nose-glow" x="-20%" y="-50%" width="140%" height="200%">
-            <feGaussianBlur stdDeviation="1.5" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <filter id="car-glow" x="-5%" y="-20%" width="110%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- ── Rear wing ── -->
-        <!-- Endplate rear -->
-        <rect x="2" y="6" width="2.5" height="19" rx="1" fill="#b8ff57"/>
-        <!-- Main plane -->
-        <rect x="1" y="6" width="14" height="3" rx="1" fill="url(#acc-g)"/>
-        <!-- DRS flap -->
-        <rect x="2" y="10" width="12" height="2" rx="0.8" fill="#ccc"/>
-        <!-- Wing pillar -->
-        <rect x="8" y="12" width="2" height="7" rx="0.5" fill="#888"/>
-
-        <!-- ── Floor / diffuser ── -->
-        <path d="M14 31 L155 31 L162 28 L164 31 L14 31Z" fill="#191919"/>
-        <!-- Diffuser fins -->
-        <line x1="20" y1="31" x2="20" y2="28" stroke="#333" stroke-width="1"/>
-        <line x1="26" y1="31" x2="26" y2="28" stroke="#333" stroke-width="1"/>
-        <line x1="32" y1="31" x2="32" y2="28" stroke="#333" stroke-width="1"/>
-
-        <!-- ── Main body ── -->
-        <path d="M14 28
-                 Q18 19 32 18
-                 L130 18
-                 Q145 18 155 22
-                 L163 26
-                 Q166 28 164 30
-                 L155 31
-                 L14 31
-                 Q11 31 14 28Z"
-              fill="url(#body-g)"/>
-
-        <!-- ── Sidepod inlet ── -->
-        <path d="M55 18 Q58 14 68 14 L80 14 L80 18Z" fill="#c0c0c0"/>
-        <path d="M56 18 Q59 15 68 15 L78 15 L78 18Z" fill="#1a1a1a" opacity="0.5"/>
-
-        <!-- ── Livery stripe ── -->
-        <path d="M14 24 L155 24 L162 22 L163 23.5 L155 25.5 L14 25.5Z"
-              fill="url(#acc-g)" opacity="0.75"/>
-
-        <!-- ── Engine cover bump ── -->
-        <path d="M88 18 Q92 13.5 100 13.5 Q108 13.5 112 18Z" fill="#d8d8d8"/>
-        <path d="M90 18 Q94 14.5 100 14.5 Q106 14.5 110 18Z" fill="#bbb"/>
-
-        <!-- ── Cockpit opening ── -->
-        <path d="M62 18 Q68 10 82 10 Q95 10 100 18Z" fill="#111"/>
-
-        <!-- ── Halo ── -->
-        <path d="M64 14 Q82 9 100 14" stroke="#bbb" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- Halo pillar -->
-        <line x1="82" y1="9" x2="82" y2="14" stroke="#bbb" stroke-width="1.5"/>
-
-        <!-- ── Helmet ── -->
-        <ellipse cx="80" cy="13" rx="8.5" ry="5.5" fill="url(#acc-g)"/>
-        <!-- Visor -->
-        <path d="M73 13 Q76 9.5 82 9.5 Q87 9.5 88 13" fill="url(#glass-g)" clip-path="ellipse(8.5px 5.5px at 80px 13px)"/>
-        <!-- Helmet stripe -->
-        <line x1="72" y1="13.5" x2="88" y2="13.5" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
-
-        <!-- ── Nose / front cone ── -->
-        <path d="M155 22 L172 26.5 L166 30 L155 31Z" fill="url(#body-g)" filter="url(#nose-glow)"/>
-        <!-- Nose tip accent -->
-        <path d="M168 26 L172 26.5 L166 30 L165 29Z" fill="url(#acc-g)"/>
-
-        <!-- ── Front wing ── -->
-        <!-- Main plane -->
-        <path d="M158 29 L176 28.5 L176 30.5 L157 31.5Z" fill="#d8d8d8"/>
-        <!-- Cascade -->
-        <path d="M161 27.5 L175 27 L175 28.5 L161 28.5Z" fill="#ccc"/>
-        <!-- Endplate -->
-        <rect x="174" y="27" width="2" height="4" rx="0.5" fill="#b8ff57"/>
-        <!-- Wing accent -->
-        <rect x="162" y="27" width="10" height="1.5" rx="0.5" fill="url(#acc-g)" opacity="0.8"/>
-
-        <!-- ══ REAR TYRE ══ -->
-        <circle cx="30" cy="34" r="9.5" fill="url(#tyre-g)"/>
-        <!-- Tyre white line -->
-        <circle cx="30" cy="34" r="9.5" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
-        <!-- Rim -->
-        <circle cx="30" cy="34" r="6" fill="url(#rim-g)"/>
-        <!-- Brake calliper (red) -->
-        <path d="M28 28.5 Q30 27.5 32 28.5 L32 30 Q30 29 28 30Z" fill="#cc2200"/>
-        <!-- Rim spokes -->
-        <line x1="30" y1="28.5" x2="30" y2="39.5" stroke="#333" stroke-width="1.2"/>
-        <line x1="24.5" y1="30.5" x2="35.5" y2="37.5" stroke="#333" stroke-width="1.2"/>
-        <line x1="35.5" y1="30.5" x2="24.5" y2="37.5" stroke="#333" stroke-width="1.2"/>
-        <!-- Centre nut -->
-        <circle cx="30" cy="34" r="1.8" fill="#444"/>
-        <circle cx="30" cy="34" r="0.8" fill="#666"/>
-
-        <!-- ══ FRONT TYRE ══ -->
-        <circle cx="148" cy="34" r="8" fill="url(#tyre-g)"/>
-        <circle cx="148" cy="34" r="8" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.2"/>
-        <!-- Rim -->
-        <circle cx="148" cy="34" r="5" fill="url(#rim-g)"/>
-        <!-- Brake calliper -->
-        <path d="M146 28.5 Q148 27.5 150 28.5 L150 30 Q148 29.2 146 30Z" fill="#cc2200"/>
-        <!-- Spokes -->
-        <line x1="148" y1="29.5" x2="148" y2="38.5" stroke="#333" stroke-width="1.1"/>
-        <line x1="143.5" y1="31" x2="152.5" y2="37" stroke="#333" stroke-width="1.1"/>
-        <line x1="152.5" y1="31" x2="143.5" y2="37" stroke="#333" stroke-width="1.1"/>
-        <!-- Centre nut -->
-        <circle cx="148" cy="34" r="1.5" fill="#444"/>
-        <circle cx="148" cy="34" r="0.6" fill="#666"/>
-
-        <!-- ── Suspension arms ── -->
-        <line x1="30" y1="26" x2="20" y2="24" stroke="#999" stroke-width="0.8" opacity="0.5"/>
-        <line x1="148" y1="26" x2="158" y2="24" stroke="#999" stroke-width="0.8" opacity="0.5"/>
-
-        <!-- ── Cockpit mirror left ── -->
-        <rect x="62" y="16" width="7" height="3" rx="1.5" fill="#555"/>
-        <rect x="63" y="16.5" width="5" height="2" rx="1" fill="#1a1a1a"/>
-      </svg>
+  <div id="music-trigger" role="button" aria-label="Music player" title="Open music player">
+    <div class="wave-bars">
+      <span></span><span></span><span></span><span></span><span></span>
     </div>
-    <div id="f1-pct">0%</div>
+    <span class="trigger-label" id="trigger-label">AMBIENT SPACE</span>
+  </div>
+
+  <div id="music-panel" role="dialog" aria-label="Music controls">
+    <div class="mp-header">
+      <span class="mp-title">// Space Ambience</span>
+      <div class="mp-close" id="mp-close" role="button" aria-label="Close">✕</div>
+    </div>
+    <canvas id="mp-viz"></canvas>
+    <div class="mp-track">
+      <div class="mp-track-name" id="mp-track-name">Void Drift</div>
+      <div class="mp-track-sub" id="mp-track-sub">Generative · ∞ duration</div>
+    </div>
+    <div class="mp-controls">
+      <div class="mp-btn" id="mp-prev" role="button" aria-label="Previous">⏮</div>
+      <div class="mp-btn mp-btn-play" id="mp-play" role="button" aria-label="Play/Pause">▶</div>
+      <div class="mp-btn" id="mp-next" role="button" aria-label="Next">⏭</div>
+    </div>
+    <div class="mp-volume">
+      <span class="mp-vol-icon">🔈</span>
+      <input type="range" class="mp-vol-slider" id="mp-vol"
+             min="0" max="100" value="40" aria-label="Volume">
+      <span class="mp-vol-icon">🔊</span>
+    </div>
+    <div class="mp-tracks">
+      <div class="mp-track-item active" data-track="0">
+        <span class="mp-ti-num">01</span>
+        <span class="mp-ti-name">Void Drift</span>
+        <span class="mp-ti-dur">∞</span>
+      </div>
+      <div class="mp-track-item" data-track="1">
+        <span class="mp-ti-num">02</span>
+        <span class="mp-ti-name">Nebula Pulse</span>
+        <span class="mp-ti-dur">∞</span>
+      </div>
+      <div class="mp-track-item" data-track="2">
+        <span class="mp-ti-num">03</span>
+        <span class="mp-ti-name">Deep Signal</span>
+        <span class="mp-ti-dur">∞</span>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════
@@ -739,7 +695,6 @@
     </button>
   </nav>
 
-  <!-- Mobile drawer -->
   <div class="nav-drawer" id="nav-drawer">
     <a href="#projects" class="drawer-link">Projects</a>
     <a href="#links"    class="drawer-link">Links</a>
@@ -749,8 +704,6 @@
   </div>
 
   <main>
-
-    <!-- ═══════════ HERO ═══════════ -->
     <section id="hero">
       <p class="hero-tag"><span class="status-dot"></span>Available &amp; building things</p>
       <h1 class="hero-name">
@@ -778,178 +731,123 @@
 
     <div class="divider"></div>
 
-    <!-- ═══════════ PROJECTS ═══════════ -->
     <section id="projects">
       <div class="container">
         <p class="section-label reveal">// Projects</p>
         <h2 class="section-title reveal">Things I&apos;ve<br/><span style="color:var(--accent)">shipped.</span></h2>
         <div class="projects-grid">
-
-          <a class="project-card reveal reveal-delay-1"
-             href="https://github.com/Westhdon/DesktopDisplay" target="_blank" rel="noopener">
+          <a class="project-card reveal reveal-delay-1" href="https://github.com/Westhdon/DesktopDisplay" target="_blank" rel="noopener">
             <span class="project-badge">Arduino / Display</span>
             <p class="project-name">DesktopDisplay</p>
             <p class="project-desc">A arduino ILI9341 TFT display utility for showing nice desktop graphics.</p>
             <span class="project-arrow">↗</span>
           </a>
-
-          <a class="project-card reveal reveal-delay-2"
-             href="https://github.com/Westhdon/osint.manager" target="_blank" rel="noopener">
+          <a class="project-card reveal reveal-delay-2" href="https://github.com/Westhdon/osint.manager" target="_blank" rel="noopener">
             <span class="project-badge">OSINT / Tool</span>
             <p class="project-name">osint.manager</p>
             <p class="project-desc">An open-source intelligence management tool. Organize, track and analyze your OSINT workflows.</p>
             <span class="project-arrow">↗</span>
           </a>
-
-          <a class="project-card reveal reveal-delay-3"
-             href="https://westhdon.itch.io/gewyscript" target="_blank" rel="noopener">
+          <a class="project-card reveal reveal-delay-3" href="https://westhdon.itch.io/gewyscript" target="_blank" rel="noopener">
             <span class="project-badge">Run in Browser</span>
             <p class="project-name">GEWYSCRIPT</p>
             <p class="project-desc">A custom programming language. Write powershell GUI apps with a simple script syntax — compiler runs right in your browser.</p>
             <span class="project-arrow">↗</span>
           </a>
-
-          <a class="project-card reveal reveal-delay-4"
-             href="https://westhdon.itch.io/password-generator" target="_blank" rel="noopener">
+          <a class="project-card reveal reveal-delay-4" href="https://westhdon.itch.io/password-generator" target="_blank" rel="noopener">
             <span class="project-badge">Security Tool</span>
             <p class="project-name">Password Generator</p>
             <p class="project-desc">Tired of getting hacked? Generate strong, secure passwords instantly and stop worrying.</p>
             <span class="project-arrow">↗</span>
           </a>
-
         </div>
       </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ═══════════ LINKS ═══════════ -->
     <section id="links">
       <div class="container">
         <p class="section-label reveal">// Find me</p>
         <h2 class="section-title reveal">All my<br/><span style="color:var(--accent)">links.</span></h2>
         <div class="links-grid">
-
-          <a class="link-card reveal reveal-delay-1"
-             href="https://github.com/Westhdon/Westhdon" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-1" href="https://github.com/Westhdon/Westhdon" target="_blank" rel="noopener">
             <div class="link-icon">🐙</div>
             <div><p class="link-name">GitHub</p><p class="link-handle">@Westhdon</p></div>
           </a>
-
-          <a class="link-card reveal reveal-delay-2"
-             href="https://westhdon.itch.io/" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-2" href="https://westhdon.itch.io/" target="_blank" rel="noopener">
             <div class="link-icon">🎮</div>
             <div><p class="link-name">itch.io</p><p class="link-handle">westhdon.itch.io</p></div>
           </a>
-
-          <a class="link-card reveal reveal-delay-3"
-             href="https://www.youtube.com/@OpfinderA" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-3" href="https://www.youtube.com/@OpfinderA" target="_blank" rel="noopener">
             <div class="link-icon">📺</div>
             <div><p class="link-name">YouTube</p><p class="link-handle">@OpfinderA</p></div>
           </a>
-
-          <a class="link-card reveal reveal-delay-4"
-             href="https://discord.com/users/1083336560918929438" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-4" href="https://discord.com/users/1083336560918929438" target="_blank" rel="noopener">
             <div class="link-icon">💬</div>
             <div><p class="link-name">Discord</p><p class="link-handle">OpfinderA</p></div>
           </a>
-
-          <a class="link-card reveal reveal-delay-1"
-             href="https://guns.lol/westhdon" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-1" href="https://guns.lol/westhdon" target="_blank" rel="noopener">
             <div class="link-icon">🔫</div>
             <div><p class="link-name">Guns.lol</p><p class="link-handle">guns.lol/westhdon</p></div>
           </a>
-
-          <a class="link-card reveal reveal-delay-2"
-             href="https://twitter.com/OpfinderA" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-2" href="https://twitter.com/OpfinderA" target="_blank" rel="noopener">
             <div class="link-icon">🐦</div>
             <div><p class="link-name">Twitter / X</p><p class="link-handle">@OpfinderA</p></div>
           </a>
-
-          <!-- ⚠️ Replace YOUR_STEAM_ID with your Steam vanity URL or 64-bit ID -->
-          <a class="link-card reveal reveal-delay-3"
-             href="https://steamcommunity.com/id/West_AN" target="_blank" rel="noopener">
+          <a class="link-card reveal reveal-delay-3" href="https://steamcommunity.com/id/West_AN" target="_blank" rel="noopener">
             <div class="link-icon">🎯</div>
-            <div><p class="link-name">Steam</p><p class="link-handle">OpfinderA</p></div>
+            <div><p class="link-name">Steam</p><p class="link-handle">West_AN</p></div>
           </a>
-
           <a class="link-card reveal reveal-delay-4" href="mailto:opfindera@gmail.com">
             <div class="link-icon">✉️</div>
             <div><p class="link-name">Email</p><p class="link-handle">opfindera@gmail.com</p></div>
           </a>
-
         </div>
       </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ═══════════ DOWNLOADS ═══════════ -->
     <section id="downloads">
       <div class="container">
         <p class="section-label reveal">// Downloads</p>
         <h2 class="section-title reveal">Free<br/><span style="color:var(--accent)">files.</span></h2>
         <div class="downloads-list">
-
           <div class="download-row reveal reveal-delay-1">
             <div class="download-info">
               <div class="download-icon">🕵️</div>
-              <div>
-                <p class="download-name">osint.manager</p>
-                <p class="download-meta">OSINT Tool · GitHub</p>
-              </div>
+              <div><p class="download-name">osint.manager</p><p class="download-meta">OSINT Tool · GitHub</p></div>
             </div>
-            <a class="btn-dl" href="https://github.com/Westhdon/osint.manager" target="_blank" rel="noopener">
-              → Open on GitHub
-            </a>
+            <a class="btn-dl" href="https://github.com/Westhdon/osint.manager" target="_blank" rel="noopener">↗ Open on GitHub</a>
           </div>
-
           <div class="download-row reveal reveal-delay-2">
             <div class="download-info">
               <div class="download-icon">🖥️</div>
-              <div>
-                <p class="download-name">DesktopDisplay</p>
-                <p class="download-meta">Arduino / Display Utility · GitHub</p>
-              </div>
+              <div><p class="download-name">DesktopDisplay</p><p class="download-meta">Arduino / Display Utility · GitHub</p></div>
             </div>
-            <a class="btn-dl" href="https://github.com/Westhdon/DesktopDisplay" target="_blank" rel="noopener">
-              → Open on GitHub
-            </a>
+            <a class="btn-dl" href="https://github.com/Westhdon/DesktopDisplay" target="_blank" rel="noopener">↗ Open on GitHub</a>
           </div>
-
           <div class="download-row reveal reveal-delay-3">
             <div class="download-info">
               <div class="download-icon">⚙️</div>
-              <div>
-                <p class="download-name">GEWYSCRIPT</p>
-                <p class="download-meta">Custom programming language · itch.io</p>
-              </div>
+              <div><p class="download-name">GEWYSCRIPT</p><p class="download-meta">Custom programming language · itch.io</p></div>
             </div>
-            <a class="btn-dl" href="https://westhdon.itch.io/gewyscript" target="_blank" rel="noopener">
-              → Open on itch.io
-            </a>
+            <a class="btn-dl" href="https://westhdon.itch.io/gewyscript" target="_blank" rel="noopener">→ Open on itch.io</a>
           </div>
-
           <div class="download-row reveal reveal-delay-4">
             <div class="download-info">
               <div class="download-icon">🔐</div>
-              <div>
-                <p class="download-name">Password Generator</p>
-                <p class="download-meta">Security Tool · itch.io</p>
-              </div>
+              <div><p class="download-name">Password Generator</p><p class="download-meta">Security Tool · itch.io</p></div>
             </div>
-            <a class="btn-dl" href="https://westhdon.itch.io/password-generator" target="_blank" rel="noopener">
-              → Open on itch.io
-            </a>
+            <a class="btn-dl" href="https://westhdon.itch.io/password-generator" target="_blank" rel="noopener">→ Open on itch.io</a>
           </div>
-
         </div>
       </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- ═══════════ CONTACT ═══════════ -->
     <section id="contact">
       <div class="container">
         <div class="contact-box reveal">
@@ -957,101 +855,419 @@
           <h2>Let&apos;s talk.</h2>
           <p>Got something cool in mind? Hit me up.</p>
           <div class="contact-actions">
-            <a class="contact-btn contact-btn-primary" href="mailto:opfindera@gmail.com">
-              ✉️ opfindera@gmail.com
-            </a>
-            <a class="contact-btn contact-btn-ghost"
-               href="https://discord.com/users/1083336560918929438" target="_blank" rel="noopener">
-              💬 Discord — OpfinderA
-            </a>
+            <a class="contact-btn contact-btn-primary" href="mailto:opfindera@gmail.com">✉️ opfindera@gmail.com</a>
+            <a class="contact-btn contact-btn-ghost" href="https://discord.com/users/1083336560918929438" target="_blank" rel="noopener">💬 Discord — OpfinderA</a>
           </div>
         </div>
       </div>
     </section>
-
   </main>
 
   <footer>
     <div class="footer-links">
-      <a href="https://github.com/Westhdon/Westhdon"  target="_blank">GitHub</a>
-      <a href="https://westhdon.itch.io/"             target="_blank">itch.io</a>
-      <a href="https://guns.lol/westhdon"             target="_blank">guns.lol</a>
+      <a href="https://github.com/Westhdon/Westhdon" target="_blank">GitHub</a>
+      <a href="https://westhdon.itch.io/" target="_blank">itch.io</a>
+      <a href="https://guns.lol/westhdon" target="_blank">guns.lol</a>
       <a href="mailto:opfindera@gmail.com">Email</a>
     </div>
     <p class="footer-right">OpfinderA ✦</p>
   </footer>
 
   <script>
-    /* ── Custom Cursor ── */
-    const cursor = document.getElementById('cursor');
-    if (cursor) {
-      document.addEventListener('mousemove', e => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top  = e.clientY + 'px';
-      });
-      document.querySelectorAll('a, button, .project-card').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('big'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
-      });
-    }
-
-    /* ── Mobile Nav ── */
-    const toggle = document.getElementById('nav-toggle');
-    const drawer = document.getElementById('nav-drawer');
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('open');
-      drawer.classList.toggle('open');
+  /* ════════════════════════════════
+     CURSOR
+  ════════════════════════════════ */
+  const cursor = document.getElementById('cursor');
+  if (cursor) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
     });
-    drawer.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        toggle.classList.remove('open');
-        drawer.classList.remove('open');
+    document.querySelectorAll('a, button, .project-card, [role="button"]').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+  }
+
+  /* ════════════════════════════════
+     MOBILE NAV
+  ════════════════════════════════ */
+  const toggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      toggle.classList.remove('open');
+      drawer.classList.remove('open');
+    });
+  });
+
+  /* ════════════════════════════════
+     SCROLL REVEAL
+  ════════════════════════════════ */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ════════════════════════════════
+     SCROLL PROGRESS BAR
+  ════════════════════════════════ */
+  const scrollBar  = document.getElementById('scroll-bar');
+  const scrollFill = document.getElementById('scroll-fill');
+  let scrollFadeTimer = null;
+
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    scrollFill.style.width = pct + '%';
+    scrollBar.classList.add('active');
+    clearTimeout(scrollFadeTimer);
+    scrollFadeTimer = setTimeout(() => scrollBar.classList.remove('active'), 1200);
+  }, { passive: true });
+
+  /* ════════════════════════════════════════════════════
+     SPACE MUSIC ENGINE — Web Audio API (generative)
+  ════════════════════════════════════════════════════ */
+  let audioCtx = null;
+  let masterGain = null;
+  let analyser = null;
+  let isPlaying = false;
+  let currentTrack = 0;
+  let activeNodes = [];
+  let vizAnim = null;
+
+  const tracks = [
+    {
+      name: 'Void Drift',
+      desc: 'Generative · ∞ duration',
+      build: buildVoidDrift
+    },
+    {
+      name: 'Nebula Pulse',
+      desc: 'Generative · ∞ duration',
+      build: buildNebulaPulse
+    },
+    {
+      name: 'Deep Signal',
+      desc: 'Generative · ∞ duration',
+      build: buildDeepSignal
+    }
+  ];
+
+  function initAudio() {
+    if (audioCtx) return;
+    audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.4;
+    analyser  = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    masterGain.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }
+
+  function createReverb(ctx, seconds = 4, decay = 2) {
+    const length = ctx.sampleRate * seconds;
+    const impulse = ctx.createBuffer(2, length, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) {
+      const ch = impulse.getChannelData(c);
+      for (let i = 0; i < length; i++) {
+        ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+      }
+    }
+    const conv = ctx.createConvolver();
+    conv.buffer = impulse;
+    return conv;
+  }
+
+  function createPad(ctx, freq, type = 'sine', detune = 0) {
+    const osc = ctx.createOscillator();
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.detune.value = detune;
+    return osc;
+  }
+
+  /* ── Track 1: Void Drift ── */
+  function buildVoidDrift(ctx, out) {
+    const rev = createReverb(ctx, 6, 3);
+    const delay = ctx.createDelay(4);
+    delay.delayTime.value = 0.75;
+    const delayFb = ctx.createGain(); delayFb.gain.value = 0.5;
+    const delayOut = ctx.createGain(); delayOut.gain.value = 0.35;
+    delay.connect(delayFb); delayFb.connect(delay);
+    delay.connect(delayOut);
+
+    const notes = [55, 82.5, 110, 138.6, 165]; // A1, E2, A2, C#3, E3
+    const nodes = [];
+
+    notes.forEach((freq, i) => {
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0.06 / (i + 1), ctx.currentTime + 3 + i * 2);
+
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.05 + i * 0.02;
+      const lfoGain = ctx.createGain(); lfoGain.gain.value = freq * 0.003;
+      lfo.connect(lfoGain);
+
+      ['sine','sine','triangle'].forEach((type, j) => {
+        const osc = createPad(ctx, freq, type, j * 8 - 4);
+        lfoGain.connect(osc.frequency);
+        osc.connect(g);
+        osc.start();
+        nodes.push(osc);
+      });
+      lfo.start(); nodes.push(lfo);
+      g.connect(rev);
+      g.connect(delay);
+      g.connect(out);
+    });
+
+    delayOut.connect(rev);
+    rev.connect(out);
+
+    // Sub drone
+    const sub = ctx.createOscillator();
+    sub.type = 'sine'; sub.frequency.value = 27.5;
+    const subG = ctx.createGain(); subG.gain.value = 0.08;
+    sub.connect(subG); subG.connect(out);
+    sub.start(); nodes.push(sub);
+
+    // Shimmer high
+    const shim = createPad(ctx, 880, 'sine');
+    const shimG = ctx.createGain(); shimG.gain.setValueAtTime(0, ctx.currentTime);
+    shimG.gain.linearRampToValueAtTime(0.012, ctx.currentTime + 8);
+    shim.connect(shimG); shimG.connect(rev); shimG.connect(out);
+    shim.start(); nodes.push(shim);
+
+    return nodes;
+  }
+
+  /* ── Track 2: Nebula Pulse ── */
+  function buildNebulaPulse(ctx, out) {
+    const rev = createReverb(ctx, 5, 2.5);
+    const nodes = [];
+
+    // LFO-modulated pulses
+    const pulseFreqs = [110, 146.8, 220, 293.7];
+    pulseFreqs.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth'; osc.frequency.value = freq;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass'; filter.frequency.value = freq * 2;
+      filter.Q.value = 3;
+
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.1 + i * 0.07;
+      const lfoG = ctx.createGain(); lfoG.gain.value = 0.05;
+      lfo.connect(lfoG); lfoG.connect(filter.frequency);
+
+      const g = ctx.createGain(); g.gain.value = 0.04;
+      osc.connect(filter); filter.connect(g);
+      g.connect(rev); g.connect(out);
+      osc.start(); lfo.start();
+      nodes.push(osc, lfo);
+    });
+
+    // Pulsing rhythmic element
+    const pulseOsc = ctx.createOscillator();
+    pulseOsc.type = 'sine'; pulseOsc.frequency.value = 55;
+    const pulseEnv = ctx.createGain(); pulseEnv.gain.value = 0;
+    pulseOsc.connect(pulseEnv); pulseEnv.connect(out);
+    pulseOsc.start(); nodes.push(pulseOsc);
+
+    let beat = ctx.currentTime;
+    function schedulePulse() {
+      pulseEnv.gain.setValueAtTime(0, beat);
+      pulseEnv.gain.linearRampToValueAtTime(0.15, beat + 0.02);
+      pulseEnv.gain.exponentialRampToValueAtTime(0.001, beat + 0.8);
+      beat += 1.5;
+    }
+    for (let i = 0; i < 120; i++) schedulePulse();
+
+    rev.connect(out);
+    return nodes;
+  }
+
+  /* ── Track 3: Deep Signal ── */
+  function buildDeepSignal(ctx, out) {
+    const rev = createReverb(ctx, 8, 4);
+    const nodes = [];
+
+    // Deep drone layer
+    [36.7, 55, 73.4, 110].forEach((freq, i) => {
+      const types = ['sine', 'triangle', 'sine'];
+      types.forEach((t, j) => {
+        const osc = ctx.createOscillator();
+        osc.type = t; osc.frequency.value = freq;
+        osc.detune.value = (j - 1) * 12;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, ctx.currentTime);
+        g.gain.linearRampToValueAtTime(0.035 / (i + 1), ctx.currentTime + 5 + i * 3);
+        osc.connect(g); g.connect(rev); g.connect(out);
+        osc.start(); nodes.push(osc);
       });
     });
 
-    /* ── Scroll Reveal ── */
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    // Eerie high formant
+    const hi = ctx.createOscillator();
+    hi.type = 'sine'; hi.frequency.value = 528;
+    const hiLfo = ctx.createOscillator(); hiLfo.frequency.value = 0.03;
+    const hiLfoG = ctx.createGain(); hiLfoG.gain.value = 8;
+    hiLfo.connect(hiLfoG); hiLfoG.connect(hi.frequency);
+    const hiG = ctx.createGain(); hiG.gain.value = 0.015;
+    hi.connect(hiG); hiG.connect(rev);
+    hi.start(); hiLfo.start(); nodes.push(hi, hiLfo);
 
-    /* ── F1 Scroll Bar ── */
-    const f1Bar      = document.getElementById('f1-bar');
-    const f1CarWrap  = document.getElementById('f1-car-wrap');
-    const f1Progress = document.getElementById('f1-progress');
-    const f1Pct      = document.getElementById('f1-pct');
-    let scrollTimer  = null;
-    let carW         = 0;
+    // Noise layer (space static)
+    const bufSize = ctx.sampleRate * 2;
+    const noiseBuffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const nd = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) nd[i] = Math.random() * 2 - 1;
+    const noiseSource = ctx.createBufferSource();
+    noiseSource.buffer = noiseBuffer; noiseSource.loop = true;
+    const noiseFilter = ctx.createBiquadFilter();
+    noiseFilter.type = 'bandpass'; noiseFilter.frequency.value = 400; noiseFilter.Q.value = 0.5;
+    const noiseG = ctx.createGain(); noiseG.gain.value = 0.018;
+    noiseSource.connect(noiseFilter); noiseFilter.connect(noiseG);
+    noiseG.connect(rev); noiseG.connect(out);
+    noiseSource.start(); nodes.push(noiseSource);
 
-    function getCarW() {
-      const svg = document.getElementById('f1-svg');
-      return svg ? svg.getBoundingClientRect().width : 180;
+    rev.connect(out);
+    return nodes;
+  }
+
+  function stopAllNodes() {
+    activeNodes.forEach(n => { try { n.stop(); } catch(e) {} });
+    activeNodes = [];
+  }
+
+  function playTrack(index) {
+    stopAllNodes();
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    currentTrack = index;
+    const t = tracks[index];
+    activeNodes = t.build(audioCtx, masterGain);
+    isPlaying = true;
+
+    // UI update
+    document.getElementById('mp-track-name').textContent = t.name;
+    document.getElementById('mp-track-sub').textContent  = t.desc;
+    document.getElementById('mp-play').textContent = '⏸';
+    document.getElementById('music-trigger').classList.add('playing');
+    document.getElementById('trigger-label').textContent = t.name.toUpperCase();
+
+    document.querySelectorAll('.mp-track-item').forEach((el, i) => {
+      el.classList.toggle('active', i === index);
+    });
+
+    startViz();
+  }
+
+  function pauseMusic() {
+    if (!audioCtx) return;
+    audioCtx.suspend();
+    isPlaying = false;
+    document.getElementById('mp-play').textContent = '▶';
+    document.getElementById('music-trigger').classList.remove('playing');
+    document.getElementById('trigger-label').textContent = 'AMBIENT SPACE';
+  }
+
+  function resumeMusic() {
+    if (!audioCtx) { playTrack(currentTrack); return; }
+    audioCtx.resume();
+    isPlaying = true;
+    document.getElementById('mp-play').textContent = '⏸';
+    document.getElementById('music-trigger').classList.add('playing');
+    document.getElementById('trigger-label').textContent = tracks[currentTrack].name.toUpperCase();
+  }
+
+  /* ── Visualizer ── */
+  function startViz() {
+    if (vizAnim) cancelAnimationFrame(vizAnim);
+    const canvas = document.getElementById('mp-viz');
+    const ctx2   = canvas.getContext('2d');
+    canvas.width  = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+
+    function draw() {
+      vizAnim = requestAnimationFrame(draw);
+      if (!analyser) return;
+      const buf = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(buf);
+
+      const W = canvas.width, H = canvas.height;
+      ctx2.clearRect(0, 0, W, H);
+
+      // Background
+      ctx2.fillStyle = '#141414';
+      ctx2.fillRect(0, 0, W, H);
+
+      const bars = 48;
+      const barW = W / bars;
+      for (let i = 0; i < bars; i++) {
+        const val = buf[Math.floor(i * buf.length / bars)] / 255;
+        const bh  = val * H * 0.85 + 2;
+        const x   = i * barW;
+        // Gradient bar
+        const grad = ctx2.createLinearGradient(0, H - bh, 0, H);
+        grad.addColorStop(0, `rgba(87,255,212,${val * 0.9})`);
+        grad.addColorStop(1, `rgba(184,255,87,${val * 0.6})`);
+        ctx2.fillStyle = grad;
+        ctx2.fillRect(x + 1, H - bh, barW - 2, bh);
+      }
     }
+    draw();
+  }
 
-    function updateF1() {
-      const scrolled   = window.scrollY;
-      const maxScroll  = document.documentElement.scrollHeight - window.innerHeight;
-      const pct        = maxScroll > 0 ? Math.min(scrolled / maxScroll, 1) : 0;
-      const barW       = f1Bar.offsetWidth;
-      if (!carW) carW  = getCarW();
-      const exhaustW   = 36; // exhaust element width
-      const margin     = 24;
-      const travel     = Math.max(0, barW - carW - exhaustW - margin);
-      const carX       = pct * travel;
+  /* ── Panel toggle ── */
+  const musicTrigger = document.getElementById('music-trigger');
+  const musicPanel   = document.getElementById('music-panel');
+  const mpClose      = document.getElementById('mp-close');
 
-      f1CarWrap.style.left = carX + 'px';
-      f1Progress.style.width = (pct * 100) + '%';
-      f1Pct.textContent = Math.round(pct * 100) + '%';
-
-      f1Bar.classList.add('scrolling');
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => f1Bar.classList.remove('scrolling'), 280);
+  musicTrigger.addEventListener('click', () => {
+    musicPanel.classList.toggle('open');
+    // Auto-play on first open
+    if (musicPanel.classList.contains('open') && !isPlaying && !audioCtx) {
+      playTrack(0);
     }
+  });
+  mpClose.addEventListener('click', () => musicPanel.classList.remove('open'));
 
-    window.addEventListener('scroll', updateF1, { passive: true });
-    window.addEventListener('resize', () => { carW = 0; updateF1(); });
-    // Small delay so SVG dimensions are available
-    setTimeout(updateF1, 100);
+  /* ── Playback controls ── */
+  document.getElementById('mp-play').addEventListener('click', () => {
+    if (isPlaying) pauseMusic();
+    else resumeMusic();
+  });
+  document.getElementById('mp-prev').addEventListener('click', () => {
+    playTrack((currentTrack - 1 + tracks.length) % tracks.length);
+  });
+  document.getElementById('mp-next').addEventListener('click', () => {
+    playTrack((currentTrack + 1) % tracks.length);
+  });
+
+  /* ── Track list ── */
+  document.querySelectorAll('.mp-track-item').forEach(el => {
+    el.addEventListener('click', () => playTrack(+el.dataset.track));
+  });
+
+  /* ── Volume ── */
+  document.getElementById('mp-vol').addEventListener('input', e => {
+    if (masterGain) masterGain.gain.value = e.target.value / 100;
+  });
+
+  /* ── Close panel on outside click ── */
+  document.addEventListener('click', e => {
+    if (!musicPanel.contains(e.target) && !musicTrigger.contains(e.target)) {
+      musicPanel.classList.remove('open');
+    }
+  });
   </script>
 </body>
 </html>
